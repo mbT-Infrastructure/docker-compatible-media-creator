@@ -1,0 +1,14 @@
+services:
+
+    compatible-media-creator:
+        container_name: compatible-media-creator
+        build: .
+        command: run.sh
+        environment:
+            - ENCODER_CPU=false
+        tmpfs:
+            - "/media/workdir"
+        volumes:
+            - "./data-local:/media/compatible-media-creator"
+        devices:
+            - "/dev/dri/renderD128"
