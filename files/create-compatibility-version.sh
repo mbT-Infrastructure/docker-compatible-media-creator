@@ -35,7 +35,6 @@ cd "$WORKING_DIR"
 
 for INPUT_FILE in "${INPUT_FILES[@]}"; do
     rm -rf ./*
-    echo "Processing \"$INPUT_FILE\""
 
     FFPROBE_OUTPUT="$(ffprobe -v error -show_entries \
         "stream=index,codec_name,codec_type,width,height:\

@@ -20,7 +20,7 @@ function cleanup {
 }
 trap cleanup EXIT
 
-echo "Starting compatibility version creation"
+echo "Starting compatibility version creation."
 
 mapfile -t INPUT_FILES < <(find "$INPUT_DIR" -type f \
     | grep --extended-regexp '\)[^-]*\[.*\].(mkv|mp4)$' || true)
@@ -40,7 +40,10 @@ for INPUT_FILE in "${INPUT_FILES[@]}"; do
         continue
     fi
 
+    echo "Processing \"$TRIMMED_INPUT_FILE\""
+
     RELATIVE_DIR="$(dirname "${INPUT_FILE#"${INPUT_DIR}/"}")"
     mkdir --parents "${OUTPUT_DIR}/$RELATIVE_DIR"
-    create-compatibility-version.sh --output "${OUTPUT_DIR}/$RELATIVE_DIR" "$INPUT_FILE"
+    create-compatibility-version.sh --output "${OUTPUT_DIR}/$RELATIVE_DIR" "$INPUT_FILE" \
+        | sed "s|^|    |"
 done
