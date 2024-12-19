@@ -70,8 +70,9 @@ stream_tags=language:disposition=visual_impaired" \
     done
     echo "Additional arguments: ${ADDITIONAL_ARGUMENTS[*]}"
     if [[ "$SKIP_COMPATIBLE" == true ]] \
-        && [[ "${ADDITIONAL_ARGUMENTS[*]}" == *"--no-video"*"--no-audio" ]]; then
+        && [[ "${ADDITIONAL_ARGUMENTS[*]}" == *"--no-video"*"--no-audio"* ]]; then
         echo "Skipping \"$INPUT_FILE\" because audio and video is already compatible."
+        continue
     fi
 
     chrt --"${SCHED_POLICY,,}" 0 nice --adjustment "$NICENESS_ADJUSTMENT" \
