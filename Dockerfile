@@ -3,7 +3,8 @@ FROM madebytimo/cron
 RUN install-autonomous.sh install Basics FFmpeg Scripts \
     && rm -rf /var/lib/apt/lists/*
 
-COPY files/create-compatibility-version.sh files/entrypoint.sh files/run.sh /usr/local/bin/
+COPY files/create-compatibility-version.sh files/entrypoint.sh files/run.sh \
+    files/video-resolution.sh /usr/local/bin/
 RUN mv /entrypoint.sh /entrypoint-cron.sh
 
 ENV CRON_SCHEDULE="0 4 * * 6"
