@@ -57,7 +57,7 @@ stream_tags=language:disposition=visual_impaired" \
     if [[ "$ENCODER_CPU" == true ]]; then
         ADDITIONAL_ARGUMENTS+=( --cpu )
     fi
-    if [[ "$VIDEO_CODEC" == "h264" ]] && [[ "$VIDEO_WIDTH" -lt "$COMPATIBILITY_VIDEO_WIDTH" ]]; then
+    if [[ "$VIDEO_CODEC" == "h264" ]] && [[ "$VIDEO_WIDTH" -le "$COMPATIBILITY_VIDEO_WIDTH" ]]; then
         ADDITIONAL_ARGUMENTS+=( --no-video )
     elif [[ "$VIDEO_WIDTH" -gt "$COMPATIBILITY_VIDEO_WIDTH" ]]; then
         ADDITIONAL_ARGUMENTS+=( --scale "${COMPATIBILITY_VIDEO_WIDTH}:-2" )
