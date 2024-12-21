@@ -50,7 +50,7 @@ stream_tags=language:disposition=visual_impaired" \
     STREAMS_TO_REMOVE="$(grep --extended-regexp '\|codec_type=(audio|subtitle)\|' \
         <<< "$FFPROBE_OUTPUT" \
         | grep --extended-regexp --invert-match \
-            '\|disposition:visual_impaired=0\|tag:language=(deu|eng)(\|.*)?$' \
+            '\|disposition:visual_impaired=0\|tag:language=(deu|eng|und)(\|.*)?$' \
         | sed 's/^.*|index=\([^|]*\)|.*$/\1/')" || true
 
     ADDITIONAL_ARGUMENTS=()
@@ -79,12 +79,17 @@ stream_tags=language:disposition=visual_impaired" \
         encode.sh --compatibility --output "$WORKING_DIR" \
         --audio-channels 2 "${ADDITIONAL_ARGUMENTS[@]}" "$INPUT_FILE"
 
-    LANGUAGES="de"
-    if grep --silent '|codec_type=audio|.*|tag:language=eng$' <<< "$FFPROBE_OUTPUT"; then
+    LANGUAGES=""
+    if grep --silent '|codec_type=audio|.*|tag:language=\(deu\|und\)\(|.*\)\?$' \
+        <<< "$FFPROBE_OUTPUT"; then
+        LANGUAGES+=",de"
+    fi
+    if grep --silent '|codec_type=audio|.*|tag:language=eng\(|.*\)\?$' <<< "$FFPROBE_OUTPUT"; then
         LANGUAGES+=",en"
     fi
+    LANGUAGES="${LANGUAGES#,}"
     RESULT_RESOLUTION="$(video-resolution.sh "$(basename "$INPUT_FILE")")"
-    rename "s/\[.*\]/- ${RESULT_RESOLUTION}p h264 [${LANGUAGES}]/" "$(basename "$INPUT_FILE")"
+    rename "s/\[.*\]/- $RESULT_RESOLUTION h264 [${LANGUAGES}]/" "$(basename "$INPUT_FILE")"
     mv ./* "$OUTPUT_DIR"
     echo
 done
