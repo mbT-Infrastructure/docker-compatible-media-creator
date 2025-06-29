@@ -1,6 +1,6 @@
 FROM madebytimo/cron
 
-RUN install-autonomous.sh install Basics FFmpeg Scripts \
+RUN install-autonomous.sh install Basics FFmpeg MetadataEditors Scripts \
     && rm -rf /var/lib/apt/lists/*
 
 COPY files/create-compatibility-version.sh files/entrypoint.sh files/run.sh \
