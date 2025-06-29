@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e -o pipefail
 
+COMPATIBILITY_VIDEO_HEIGHT=1080
 COMPATIBILITY_VIDEO_WIDTH=1920
 INPUT_FILES=()
 OUTPUT_DIR=""
@@ -44,6 +45,7 @@ stream_tags=language:disposition=visual_impaired" \
         | head --lines 1)"
     VIDEO_CODEC="$(sed 's/^.*|codec_name=\([^|]*\)|.*$/\1/' <<< "$VIDEO_STREAM")"
     VIDEO_WIDTH="$(sed 's/^.*|width=\([^|]*\)|.*$/\1/' <<< "$VIDEO_STREAM")"
+    VIDEO_HEIGHT="$(sed 's/^.*|height=\([^|]*\)|.*$/\1/' <<< "$VIDEO_STREAM")"
     AUDIO_CODEC="$(grep '|codec_type=audio|' <<< "$FFPROBE_OUTPUT" \
         | head --lines 1 \
         | sed 's/^.*|codec_name=\([^|]*\)|.*$/\1/')"
@@ -57,10 +59,11 @@ stream_tags=language:disposition=visual_impaired" \
     if [[ "$ENCODER_CPU" == true ]]; then
         ADDITIONAL_ARGUMENTS+=( --cpu )
     fi
-    if [[ "$VIDEO_CODEC" == "h264" ]] && [[ "$VIDEO_WIDTH" -le "$COMPATIBILITY_VIDEO_WIDTH" ]]; then
+    if  [[ "$VIDEO_HEIGHT" -gt "$COMPATIBILITY_VIDEO_HEIGHT" ]] \
+        || [[ "$VIDEO_WIDTH" -gt "$COMPATIBILITY_VIDEO_WIDTH" ]]; then
+        ADDITIONAL_ARGUMENTS+=( --scale "${COMPATIBILITY_VIDEO_WIDTH}x${COMPATIBILITY_VIDEO_HEIGHT}" )
+    elif [[ "$VIDEO_CODEC" == "h264" ]]; then
         ADDITIONAL_ARGUMENTS+=( --no-video )
-    elif [[ "$VIDEO_WIDTH" -gt "$COMPATIBILITY_VIDEO_WIDTH" ]]; then
-        ADDITIONAL_ARGUMENTS+=( --scale "${COMPATIBILITY_VIDEO_WIDTH}:-2" )
     fi
     if [[ "$AUDIO_CODEC" == "aac" ]]; then
         ADDITIONAL_ARGUMENTS+=( --no-audio )
@@ -75,8 +78,7 @@ stream_tags=language:disposition=visual_impaired" \
         continue
     fi
 
-    chrt --"${SCHED_POLICY,,}" 0 nice --adjustment "$NICENESS_ADJUSTMENT" \
-        encode.sh --compatibility --output "$WORKING_DIR" \
+    low-priority.sh encode.sh --compatibility --output "$WORKING_DIR" \
         --audio-channels 2 "${ADDITIONAL_ARGUMENTS[@]}" "$INPUT_FILE"
 
     LANGUAGES=""
