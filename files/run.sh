@@ -43,7 +43,6 @@ for INPUT_FILE in "${INPUT_FILES[@]}"; do
     echo "Processing \"$TRIMMED_INPUT_FILE\""
 
     RELATIVE_DIR="$(dirname "${INPUT_FILE#"${INPUT_DIR}/"}")"
-    mkdir --parents "${OUTPUT_DIR}/$RELATIVE_DIR"
     create-compatibility-version.sh --output "${OUTPUT_DIR}/$RELATIVE_DIR" "$INPUT_FILE" \
         | sed "s|^|    |"
 done

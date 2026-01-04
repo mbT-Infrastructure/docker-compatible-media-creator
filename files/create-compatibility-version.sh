@@ -92,6 +92,7 @@ stream_tags=language:disposition=visual_impaired" \
     LANGUAGES="${LANGUAGES#,}"
     RESULT_RESOLUTION="$(video-resolution.sh "$(basename "$INPUT_FILE")")"
     rename "s/\[.*\]/- $RESULT_RESOLUTION h264 [${LANGUAGES}]/" "$(basename "$INPUT_FILE")"
+    mkdir --parents "$OUTPUT_DIR"
     mv ./* "$OUTPUT_DIR"
     echo
 done

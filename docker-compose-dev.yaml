@@ -11,4 +11,4 @@ services:
         volumes:
             - "./data-local:/media/compatible-media-creator"
         devices:
-            - "/dev/dri/renderD128"
+            - "/dev/dri"
