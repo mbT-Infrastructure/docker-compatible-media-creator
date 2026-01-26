@@ -10,4 +10,4 @@ if [[ -n "$CRON_SCHEDULE" ]]; then
         > /media/cron/compatible-media-creator
 fi
 
-exec /entrypoint-cron.sh "$@"
+"$@"
