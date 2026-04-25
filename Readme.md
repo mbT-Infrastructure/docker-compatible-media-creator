@@ -8,23 +8,26 @@
 
 ### Environment variables
 
--   `CRON_SCHEDULE`
-    -   The time to run at as cron schedule, default `0 4 * * 6`.
--   `ENCODER_CPU`
-    -   Set to `true` to enable cpu encoding.
--   `NICENESS_ADJUSTMENT`
-    -   Set a custom niceness adjustment, default `19`.
--   `SCHED_POLICY`
-    -   Set the specified scheduling policy, default `idle`.
+- `CRON_SCHEDULE`
+    - The time to run at as cron schedule, default `0 4 * * 6`.
+- `ENCODER_CPU`
+    - Set to `true` to enable cpu encoding.
+- `NICENESS_ADJUSTMENT`
+    - Set a custom niceness adjustment, default `19`.
+- `RUN_AT_STARTUP`
+    - Set to `true` to run once immediately at container startup, then follow the regular
+      schedule. Set to `false` to only execute on the cron schedule. Default is `false`.
+- `SCHED_POLICY`
+    - Set the specified scheduling policy, default `idle`.
 
 ### Volumes
 
--   `/media/compatible-media-creator/input`
-    -   The original media library.
--   `/media/compatible-media-creator/output`
-    -   The output folder for the compatibility files.
--   `/media/workdir`
-    -   The directory which is used as temporary directory to process files.
+- `/media/compatible-media-creator/input`
+    - The original media library.
+- `/media/compatible-media-creator/output`
+    - The output folder for the compatibility files.
+- `/media/workdir`
+    - The directory which is used as temporary directory to process files.
 
 ## Development
 

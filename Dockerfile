@@ -8,6 +8,7 @@ COPY files/create-compatibility-version.sh files/entrypoint.sh files/run.sh /usr
 ENV CRON_SCHEDULE="0 4 * * 6"
 ENV ENCODER_CPU="false"
 ENV NICENESS_ADJUSTMENT="19"
+ENV RUN_AT_STARTUP="false"
 ENV SCHED_POLICY="idle"
 
 ENTRYPOINT [ "entrypoint.sh" ]

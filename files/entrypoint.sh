@@ -10,4 +10,8 @@ if [[ -n "$CRON_SCHEDULE" ]]; then
         > /media/cron/compatible-media-creator
 fi
 
+if [[ "$RUN_AT_STARTUP" == "true" ]]; then
+    run.sh
+fi
+
 "$@"

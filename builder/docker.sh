@@ -52,7 +52,9 @@ cd "$PROJECT_DIR"
 mkdir --parents builds
 
 if [[ "$UPDATE_BASE" == true ]]; then
-    BASE_IMAGE="$(tac Dockerfile | grep --max-count=1 "^FROM" | cut -d" " -f2)"
+    BASE_IMAGE="$(grep "^FROM " Dockerfile \
+        | grep --invert-match --max-count=1  "^FROM scratch$" \
+        | cut -d" " -f2)"
     docker pull --quiet "$BASE_IMAGE"
     BASE_IMAGE_DATE="$(docker image inspect --format="{{ .Created }}" "$BASE_IMAGE" \
         | sed 's|^\([^T ]*\)[T ].*$|\1|')"

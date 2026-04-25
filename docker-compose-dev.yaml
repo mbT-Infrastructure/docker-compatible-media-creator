@@ -3,12 +3,19 @@ services:
     compatible-media-creator:
         container_name: compatible-media-creator
         build: .
-        command: run.sh
+        mem_limit: 8G
+        devices:
+            - /dev/dri
         environment:
+            - CRON_SCHEDULE=* * * * *
             - ENCODER_CPU=false
+            - RUN_AT_STARTUP=false
+        read_only: true
         tmpfs:
-            - "/media/workdir"
+            - /media/cron
+            - /media/workdir
+            - /run
+            - /run/lock
+            - /tmp:exec
         volumes:
             - "./data-local:/media/compatible-media-creator"
-        devices:
-            - "/dev/dri"
